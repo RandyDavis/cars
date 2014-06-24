@@ -20,9 +20,15 @@ class Car
 		"I'm a car! I've driven #{@distance} and have #{@fuel} gallons gas left"
 	end
 
-	def initialize(color)
+	attr_accessor :roof_status
+	def initialize(color, convertible = false)
 		@@total_car_count += 1
 		@color = color
+		@convertible = convertible
+		if @convertible
+			@roof_status ='closed'
+		end
+
 		if @@cars_per_color.include?(color)
 			@@cars_per_color[color] += 1
 		else
@@ -31,8 +37,22 @@ class Car
 		@fuel = 10
 		@distance = 0
 	end
-	
 
+	def top_down
+		if @convertible
+			@roof_status = "open"
+		end
+		puts "The roof is #{@roof_status}."
+	end
+
+	def close_top
+		if @convertible
+			@roof_status = "closed"
+		end
+		puts "The roof is #{@roof_status}."
+	end
+
+	
 	def color= (new_color)
 		@@cars_per_color[@color] -= 1
 		@color = new_color
@@ -61,6 +81,7 @@ class Car
 		@fuel = 10.0
 	end
 end
+
 
 camaro = Car.new('white')
 beetle = Car.new('red')
