@@ -1,5 +1,6 @@
 class Car
 	@@total_car_count = 0
+	@@cars_per_color = Hash.new
 
 	# "self." means that the method belongs to the class instead of the instance.
 
@@ -7,14 +8,40 @@ class Car
 		@@total_car_count
 	end
 
+	def self.cars_per_color
+		@@cars_per_color
+	end
+
+	def self.most_popular_color
+		@@cars_per_color.max_by {|color, amount| amount}[0]
+	end
+
 	def to_s()
 		"I'm a car! I've driven #{@distance} and have #{@fuel} gallons gas left"
 	end
 
-	def initialize()
+	def initialize(color)
+		@@total_car_count += 1
+		@color = color
+		if @@cars_per_color.include?(color)
+			@@cars_per_color[color] += 1
+		else
+			@@cars_per_color[color] = 1
+		end
 		@fuel = 10
 		@distance = 0
 	end
+
+	def color= (new_color)
+		@@cars_per_color[@color] -= 1
+		@color = new_color
+		if @@cars_per_color.include?(new_color)
+			@@cars_per_color[new_color] += 1
+		else
+			@@cars_per_color[new_color] = 1
+		end
+	end
+
 
 	def drive(miles)
 		if (@fuel - miles/20.0) >= 0
@@ -34,20 +61,15 @@ class Car
 	end
 end
 
-# 1 - Class method on instance
-#c = Car.new
-#c.total_car_count
-
-# 2 - Class method on class
-#Car.total_car_count
-
-# 3 - Instance method on class
-#Car.drive(10)
-
-# 4 - Instance method on instance
-c = Car.new
-c.drive(10)
-
+camaro = Car.new('white')
+beetle = Car.new('red')
+a = Car.new('black')
+b = Car.new('black')
+c = Car.new('green')
+d = Car.new('black')
+e = Car.new('red')
+best_color = Car.most_popular_color
+Car.new(best_color)
 
 =begin
 	
@@ -60,24 +82,3 @@ Class variables can be accessed anywhere
 
 =end
 
-=begin
-puts Car.total_car_count
-c1 = Car.new
-puts Car.total_car_count
-c2 = Car.new
-puts Car.total_car_count
-=end
-
-=begin
-car_a = Car.new()
-car_b = Car.new()
-puts car_a
-puts car_b
-car_a.drive(10)
-puts car_a
-puts car_b
-car_a.drive(232)
-car_b.drive(117)
-puts car_a
-puts car_b
-=end
