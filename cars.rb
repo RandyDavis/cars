@@ -31,6 +31,7 @@ class Car
 		@fuel = 10
 		@distance = 0
 	end
+	
 
 	def color= (new_color)
 		@@cars_per_color[@color] -= 1
